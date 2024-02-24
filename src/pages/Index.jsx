@@ -9,10 +9,22 @@ const Index = () => {
   const [encryptedText, setEncryptedText] = useState("");
   const toast = useToast();
 
-  // これはダミーの暗号化関数です。実際の暗号化ロジックを実装する必要があります。
-  const encrypt = (key, text, n) => {
-    // 暗号化されたテキストを返します（ダミーの結果）
-    return `encrypted(${text})`;
+  const encrypt = (text, n) => {
+    const shift = n % 26;
+    return text
+      .split("")
+      .map((char) => {
+        let code = char.charCodeAt(0);
+        if (code >= 65 && code <= 90) {
+          // Uppercase letters
+          return String.fromCharCode(((code - 65 + shift) % 26) + 65);
+        } else if (code >= 97 && code <= 122) {
+          // Lowercase letters
+          return String.fromCharCode(((code - 97 + shift) % 26) + 97);
+        }
+        return char; // Non-alphabetic characters are unchanged
+      })
+      .join("");
   };
 
   const handleEncrypt = () => {
